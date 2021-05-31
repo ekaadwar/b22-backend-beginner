@@ -52,3 +52,56 @@ exports.insertItems = (req, res) => {
     }
   });
 };
+
+exports.updatePartial = (req, res) => {
+  const { id } = req.params;
+  modelItems.getItemById(id, (error, results, _fields) => {
+    if (!error) {
+      if (results.length > 0) {
+        const { name, price } = req.body;
+
+        const key = Object.keys(req.body);
+        if (key.length == 1) {
+          const firstColumn = key[0];
+          const dataUpdate = { id, [firstColumn]: req.body[firstColumn] };
+          modelItems.updateItemPartial(dataUpdate, (error, results, _fields) => {
+            if (!error) {
+              return res.status(200).json({
+                success: true,
+                message: "Data has been updated",
+              });
+            } else {
+              console.log(error);
+              return res.status(500).json({
+                success: false,
+                message: "Data can't update!",
+              });
+            }
+          });
+        } else {
+          console.log("data's input must single data");
+          return res.status(400).json({
+            success: false,
+            message: "data's input must single data",
+          });
+        }
+      } else {
+        return res.status(404).json({
+          success: false,
+          message: "Data not found!",
+        });
+      }
+      // return res.status(200).json({
+      //   success: true,
+      //   message: "Data read successfully by id!",
+      //   results,
+      // });
+    } else {
+      console.log(error);
+      return res.status(500).json({
+        success: false,
+        message: "Data can't read by id!",
+      });
+    }
+  });
+};
