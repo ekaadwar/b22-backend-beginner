@@ -36,7 +36,6 @@ exports.detailItems = (req, res) => {
 exports.insertItems = (req, res) => {
   const { name, price } = req.body;
   const data = { name, price };
-
   modelItems.insertItems(data, (error, results, _fields) => {
     if (!error) {
       return res.status(200).json({
@@ -58,8 +57,6 @@ exports.updatePartial = (req, res) => {
   modelItems.getItemById(id, (error, results, _fields) => {
     if (!error) {
       if (results.length > 0) {
-        const { name, price } = req.body;
-
         const key = Object.keys(req.body);
         if (key.length == 1) {
           const firstColumn = key[0];
@@ -91,11 +88,6 @@ exports.updatePartial = (req, res) => {
           message: "Data not found!",
         });
       }
-      // return res.status(200).json({
-      //   success: true,
-      //   message: "Data read successfully by id!",
-      //   results,
-      // });
     } else {
       console.log(error);
       return res.status(500).json({
@@ -103,5 +95,27 @@ exports.updatePartial = (req, res) => {
         message: "Data can't read by id!",
       });
     }
+  });
+};
+
+exports.updateItem = (req, res) => {
+  const { id } = req.params;
+  modelItems.getItemById(id, (error, results, _fields) => {
+    const { name, price } = req.body;
+    const dataUpdate = { id, name, price };
+    modelItems.updateItem(dataUpdate, (error, results, _fields) => {
+      if (!error) {
+        return res.status(200).json({
+          success: true,
+          message: "Data has been updated",
+        });
+      } else {
+        console.log(error);
+        return res.status(500).json({
+          success: false,
+          message: "Data can't update!",
+        });
+      }
+    });
   });
 };

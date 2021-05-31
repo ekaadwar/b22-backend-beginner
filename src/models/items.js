@@ -18,3 +18,7 @@ exports.updateItemPartial = (data, cb) => {
   const columnItem = key[keyLength - 1];
   db.query(`UPDATE items SET ${columnItem}=? WHERE id=?`, [data[columnItem], data.id], cb);
 };
+
+exports.updateItem = (data, cb) => {
+  db.query(`UPDATE items SET name=?, price=? WHERE id=?`, [data.name, data.price, data.id], cb);
+};
