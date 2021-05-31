@@ -22,3 +22,7 @@ exports.updateItemPartial = (data, cb) => {
 exports.updateItem = (data, cb) => {
   db.query(`UPDATE items SET name=?, price=? WHERE id=?`, [data.name, data.price, data.id], cb);
 };
+
+exports.deleteItem = (data, cb) => {
+  db.query(`DELETE FROM items WHERE id=?`, [data.id], cb);
+};

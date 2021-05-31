@@ -119,3 +119,28 @@ exports.updateItem = (req, res) => {
     });
   });
 };
+
+exports.deleteItem = (req, res) => {
+  const { id: idString } = req.params;
+  const id = parseInt(idString);
+  modelItems.getItemById(id, (error, results, _fields) => {
+    if (!error) {
+      if (results.length > 0) {
+        modelItems.deleteItem(id, (error, results, _fields) => {
+          if (!error) {
+            return res.status(200).json({
+              success: true,
+              message: "Data has been deleted",
+            });
+          } else {
+            console.log(error);
+            return res.status(500).json({
+              success: false,
+              message: "Data deletion failed",
+            });
+          }
+        });
+      }
+    }
+  });
+};
