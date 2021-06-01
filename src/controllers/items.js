@@ -1,13 +1,10 @@
 const modelItems = require("../models/items");
+const { response: standardResponse } = require("../helpers/standardResponse");
 
 exports.getItems = (req, res) => {
   modelItems.getItems((error, results, _fields) => {
     if (!error) {
-      return res.status(200).json({
-        success: true,
-        message: "Data read succesfully",
-        results,
-      });
+      return standardResponse(res, 200, true, "Data read succesfully", results);
     } else {
       console.log(error);
     }
@@ -18,36 +15,10 @@ exports.detailItems = (req, res) => {
   const { id } = req.params;
   modelItems.getItemById(id, (error, results, _fields) => {
     if (!error) {
-      return res.status(200).json({
-        success: true,
-        message: "Data read successfully by id!",
-        results,
-      });
+      return standardResponse(res, 200, true, "Data read successfully by id!", results);
     } else {
       console.log(error);
-      return res.status(500).json({
-        success: false,
-        message: "Data can't read by id!",
-      });
-    }
-  });
-};
-
-exports.insertItems = (req, res) => {
-  const { name, price } = req.body;
-  const data = { name, price };
-  modelItems.insertItems(data, (error, results, _fields) => {
-    if (!error) {
-      return res.status(200).json({
-        success: true,
-        message: "Item has been inserted",
-      });
-    } else {
-      console.log(error);
-      return res.json({
-        success: false,
-        message: "Data failed to insert",
-      });
+      return standardResponse(res, 500, false, "Data can't read by id!");
     }
   });
 };
@@ -63,37 +34,22 @@ exports.updatePartial = (req, res) => {
           const dataUpdate = { id, [firstColumn]: req.body[firstColumn] };
           modelItems.updateItemPartial(dataUpdate, (error, results, _fields) => {
             if (!error) {
-              return res.status(200).json({
-                success: true,
-                message: "Data has been updated",
-              });
+              return standardResponse(res, 200, true, "Data has been updated");
             } else {
               console.log(error);
-              return res.status(500).json({
-                success: false,
-                message: "Data can't update!",
-              });
+              return standardResponse(res, 500, false, "Data can't update!");
             }
           });
         } else {
           console.log("data's input must single data");
-          return res.status(400).json({
-            success: false,
-            message: "data's input must single data",
-          });
+          return standardResponse(res, 400, false, "data's input must single data");
         }
       } else {
-        return res.status(404).json({
-          success: false,
-          message: "Data not found!",
-        });
+        return standardResponse(res, 404, false, "Data not found!");
       }
     } else {
       console.log(error);
-      return res.status(500).json({
-        success: false,
-        message: "Data can't read by id!",
-      });
+      return standardResponse(res, 500, false, "Data can't read by id!");
     }
   });
 };
@@ -105,16 +61,10 @@ exports.updateItem = (req, res) => {
     const dataUpdate = { id, name, price };
     modelItems.updateItem(dataUpdate, (error, results, _fields) => {
       if (!error) {
-        return res.status(200).json({
-          success: true,
-          message: "Data has been updated",
-        });
+        return standardResponse(res, 200, true, "Data has been updated");
       } else {
         console.log(error);
-        return res.status(500).json({
-          success: false,
-          message: "Data can't update!",
-        });
+        return standardResponse(res, 500, false, "Data can't update!");
       }
     });
   });
@@ -128,16 +78,10 @@ exports.deleteItem = (req, res) => {
       if (results.length > 0) {
         modelItems.deleteItem(id, (error, results, _fields) => {
           if (!error) {
-            return res.status(200).json({
-              success: true,
-              message: "Data has been deleted",
-            });
+            return standardResponse(res, 200, true, "Data has been deleted");
           } else {
             console.log(error);
-            return res.status(500).json({
-              success: false,
-              message: "Data deletion failed",
-            });
+            return standardResponse(res, 500, false, "Data deletion failed");
           }
         });
       }
