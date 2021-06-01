@@ -15,6 +15,7 @@ exports.insertItems = (req, res) => {
 
 exports.getItems = (req, res) => {
   const condition = req.query.search;
+  const sort = req.query.sort;
   if (condition) {
     modelItems.getItemByCond(condition, (error, results, _fields) => {
       if (error) throw error;
