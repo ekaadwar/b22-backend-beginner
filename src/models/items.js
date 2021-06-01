@@ -12,9 +12,9 @@ exports.getItemByCond = (cond, cb) => {
   db.query(`SELECT items.id, items.name, items.price, category.name AS category_name, items.created_at, items.updated_at FROM items LEFT JOIN category ON items.category_id = category.id WHERE items.name LIKE '%${cond}%'`, cb);
 };
 
-// exports.getItemByCondSort = (data, cb) => {
-//   db.query(`SELECT items.id, items.name, items.price FROM items WHERE items.name LIKE '%${data.cond}%' ORDER BY ${data.column} ${data.sort}`, cb);
-// };
+exports.getItemByCondNSort = (cond, sort, column = item.name, cb) => {
+  db.query(`SELECT items.id, items.name, items.price FROM items WHERE items.name LIKE '%${cond}%' ORDER BY ${column} ${sort}`, cb);
+};
 
 exports.getItemById = (id, cb) => {
   db.query(`SELECT items.id, items.name, items.price, category.name AS category_name, items.created_at, items.updated_at FROM items LEFT JOIN category ON items.category_id = category.id WHERE id=${id}`, cb);

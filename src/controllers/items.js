@@ -17,10 +17,22 @@ exports.getItems = (req, res) => {
   const condition = req.query.search;
   const sort = req.query.sort;
   if (condition) {
-    modelItems.getItemByCond(condition, (error, results, _fields) => {
-      if (error) throw error;
-      return standardResponse(res, 200, true, "Search data succesfully", results);
-    });
+    if (sort) {
+      const dataColumn = Object.keys(req.body);
+      const column = dataColumn[0];
+      modelItems.getItemByCondNSort(condition, sort, column, (error, results, _fields) => {
+        if (!error) {
+          return standardResponse(res, 200, true, "Data read succesfully", results);
+        } else {
+          return standardResponse(res, 500, false, "Data read has failed!");
+        }
+      });
+    } else {
+      modelItems.getItemByCond(condition, (error, results, _fields) => {
+        if (error) throw error;
+        return standardResponse(res, 200, true, "Search data succesfully", results);
+      });
+    }
   } else {
     if (sort) {
       const dataColumn = Object.keys(req.body);
