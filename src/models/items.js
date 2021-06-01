@@ -24,5 +24,5 @@ exports.updateItem = (data, cb) => {
 };
 
 exports.deleteItem = (data, cb) => {
-  db.query(`DELETE FROM items WHERE id=?`, [data.id], cb);
+  db.query(`DELETE FROM items WHERE id=?`, [data], cb);
 };
