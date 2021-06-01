@@ -1,6 +1,18 @@
 const modelItems = require("../models/items");
 const { response: standardResponse } = require("../helpers/standardResponse");
 
+exports.insertItems = (req, res) => {
+  const { name, price, categoryId } = req.body;
+  const dataInsert = { name, price, categoryId };
+  modelItems.insertItems(dataInsert, (error, results, _fields) => {
+    if (!error) {
+      return standardResponse(res, 200, true, "Data has been inserted succesfully!");
+    } else {
+      return standardResponse(res, 500, false, "Data insertion has failed!");
+    }
+  });
+};
+
 exports.getItems = (req, res) => {
   const condition = req.query.search;
   if (condition) {

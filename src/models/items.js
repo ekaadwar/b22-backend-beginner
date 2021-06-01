@@ -13,7 +13,7 @@ exports.getItemById = (id, cb) => {
 };
 
 exports.insertItems = (data, cb) => {
-  db.query(`INSERT INTO items (name, price) VALUES('${data.name}', ${data.price})`, cb);
+  db.query(`INSERT INTO items (name, price, category_id) VALUES('${data.name}', ${data.price}, ${data.categoryId})`, cb);
 };
 
 exports.updateItemPartial = (data, cb) => {
