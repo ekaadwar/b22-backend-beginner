@@ -4,6 +4,10 @@ exports.getItems = (cb) => {
   db.query(`SELECT items.id, items.name, items.price, category.name AS category_name, items.created_at, items.updated_at FROM items LEFT JOIN category ON items.category_id = category.id`, cb);
 };
 
+exports.getItemsSort = (sort, column = item.name, cb) => {
+  db.query(`SELECT items.id, items.name, items.price, category.name AS category_name, items.created_at, items.updated_at FROM items LEFT JOIN category ON items.category_id = category.id ORDER BY ${column} ${sort}`, cb);
+};
+
 exports.getItemByCond = (cond, cb) => {
   db.query(`SELECT items.id, items.name, items.price, category.name AS category_name, items.created_at, items.updated_at FROM items LEFT JOIN category ON items.category_id = category.id WHERE items.name LIKE '%${cond}%'`, cb);
 };

@@ -22,13 +22,25 @@ exports.getItems = (req, res) => {
       return standardResponse(res, 200, true, "Search data succesfully", results);
     });
   } else {
-    modelItems.getItems((error, results, _fields) => {
-      if (!error) {
-        return standardResponse(res, 200, true, "Data read succesfully", results);
-      } else {
-        console.log(error);
-      }
-    });
+    if (sort) {
+      const dataColumn = Object.keys(req.body);
+      const column = dataColumn[0];
+      modelItems.getItemsSort(sort, column, (error, results, _fields) => {
+        if (!error) {
+          return standardResponse(res, 200, true, "Data read succesfully", results);
+        } else {
+          return standardResponse(res, 500, false, "Data read has failed!");
+        }
+      });
+    } else {
+      modelItems.getItems((error, results, _fields) => {
+        if (!error) {
+          return standardResponse(res, 200, true, "Data read succesfully", results);
+        } else {
+          return standardResponse(res, 500, false, "Data read has failed!");
+        }
+      });
+    }
   }
 };
 
