@@ -4,6 +4,10 @@ exports.getItems = (cb) => {
   db.query(`SELECT name, price FROM items`, cb);
 };
 
+exports.getItemByCond = (cond, cb) => {
+  db.query(`SELECT items.id, items.name, items.price FROM items WHERE items.name LIKE '%${cond}%'`, cb);
+};
+
 exports.getItemById = (id, cb) => {
   db.query(`SELECT name, price FROM items WHERE id=${id}`, cb);
 };

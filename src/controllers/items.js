@@ -2,13 +2,21 @@ const modelItems = require("../models/items");
 const { response: standardResponse } = require("../helpers/standardResponse");
 
 exports.getItems = (req, res) => {
-  modelItems.getItems((error, results, _fields) => {
-    if (!error) {
-      return standardResponse(res, 200, true, "Data read succesfully", results);
-    } else {
-      console.log(error);
-    }
-  });
+  const condition = req.query.search;
+  if (condition) {
+    modelItems.getItemByCond(condition, (error, results, _fields) => {
+      if (error) throw error;
+      return standardResponse(res, 200, true, "Search data succesfully", results);
+    });
+  } else {
+    modelItems.getItems((error, results, _fields) => {
+      if (!error) {
+        return standardResponse(res, 200, true, "Data read succesfully", results);
+      } else {
+        console.log(error);
+      }
+    });
+  }
 };
 
 exports.detailItems = (req, res) => {
