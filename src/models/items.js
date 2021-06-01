@@ -1,11 +1,11 @@
 const db = require("../helpers/database");
 
 exports.getItems = (cb) => {
-  db.query(`SELECT items.id, items.name, items.price, category.name AS category_name FROM items LEFT JOIN category ON items.category_id = category.id`, cb);
+  db.query(`SELECT items.id, items.name, items.price, category.name AS category_name, items.created_at, items.updated_at FROM items LEFT JOIN category ON items.category_id = category.id`, cb);
 };
 
 exports.getItemByCond = (cond, cb) => {
-  db.query(`SELECT items.id, items.name, items.price FROM items WHERE items.name LIKE '%${cond}%'`, cb);
+  db.query(`SELECT items.id, items.name, items.price, category.name AS category_name, items.created_at, items.updated_at FROM items LEFT JOIN category ON items.category_id = category.id WHERE items.name LIKE '%${cond}%'`, cb);
 };
 
 // exports.getItemByCondSort = (data, cb) => {
@@ -13,7 +13,7 @@ exports.getItemByCond = (cond, cb) => {
 // };
 
 exports.getItemById = (id, cb) => {
-  db.query(`SELECT name, price FROM items WHERE id=${id}`, cb);
+  db.query(`SELECT items.id, items.name, items.price, category.name AS category_name, items.created_at, items.updated_at FROM items LEFT JOIN category ON items.category_id = category.id WHERE id=${id}`, cb);
 };
 
 exports.insertItems = (data, cb) => {
