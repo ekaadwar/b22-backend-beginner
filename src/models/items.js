@@ -17,7 +17,7 @@ exports.getItemByCondNSort = (cond, sort, column = item.name, cb) => {
 };
 
 exports.getItemById = (id, cb) => {
-  db.query(`SELECT items.id, items.name, items.price, category.name AS category_name, items.created_at, items.updated_at FROM items LEFT JOIN category ON items.category_id = category.id WHERE id=${id}`, cb);
+  db.query(`SELECT items.id, items.name, items.price, category.name AS category_name, items.created_at, items.updated_at FROM items LEFT JOIN category ON items.category_id = category.id WHERE items.id=${id}`, cb);
 };
 
 exports.insertItems = (data, cb) => {
