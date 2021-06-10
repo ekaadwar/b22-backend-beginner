@@ -1,9 +1,15 @@
+require("dotenv").config();
+
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
+
+const whiteList = "http://localhost:3000";
+app.use(cors(whiteList));
 
 app.get("/", (req, res) => {
   const data = {
