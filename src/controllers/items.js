@@ -1,5 +1,6 @@
 const modelItems = require("../models/items");
 const { response: standardResponse } = require("../helpers/standardResponse");
+const { APP_URL } = process.env;
 
 exports.insertItems = (req, res) => {
   const { name, price, categoryId } = req.body;
@@ -14,46 +15,45 @@ exports.insertItems = (req, res) => {
 };
 
 exports.getItems = (req, res) => {
-  const condition = req.query.search;
+  // const condition = req.query.search;
   const sort = req.query.sort;
-  if (condition) {
-    if (sort) {
-      const dataColumn = Object.keys(req.body);
-      const column = dataColumn[0];
-      modelItems.getItemByCondNSort(condition, sort, column, (error, results, _fields) => {
+
+  const condition = req.query;
+  condition.search = condition.search || "";
+  condition.sort = condition.sort || {};
+  condition.sort.name = condition.sort.name || "ASC";
+  condition.limit = parseInt(condition.limit) || 5;
+  condition.offset = parseInt(condition.offset) || 0;
+  condition.page = parseInt(condition.page) || 1;
+
+  condition.offset = condition.page * condition.limit - condition.limit;
+
+  pageInfo = {};
+
+  modelItems.getItemByCond(condition, (error, results, _fields) => {
+    if (!error) {
+      modelItems.getItemsCount(condition, (error, resultCount, _fields) => {
         if (!error) {
-          return standardResponse(res, 200, true, "Data read succesfully", results);
+          const totalData = resultCount[0].count;
+          const lastPage = Math.ceil(totalData / condition.limit);
+
+          pageInfo.totalData = totalData;
+          pageInfo.currentPage = condition.page;
+          pageInfo.lastPage = lastPage;
+          pageInfo.limit = condition.limit;
+          pageInfo.nextPage = condition.page < lastPage ? `${APP_URL}/items/?page=${pageInfo.currentPage + 1}` : null;
+          pageInfo.prevPage = condition.page > 1 ? `${APP_URL}/items/?page=${pageInfo.currentPage - 1}` : null;
+          return standardResponse(res, 200, true, "Search data succesfully", results, pageInfo);
         } else {
-          return standardResponse(res, 500, false, "Data read has failed!");
+          console.log(error);
+          return standardResponse(res, 404, false, "Data not found!", results);
         }
       });
     } else {
-      modelItems.getItemByCond(condition, (error, results, _fields) => {
-        if (error) throw error;
-        return standardResponse(res, 200, true, "Search data succesfully", results);
-      });
+      console.log(error);
+      return standardResponse(res, 404, false, "Data not found!", results);
     }
-  } else {
-    if (sort) {
-      const dataColumn = Object.keys(req.body);
-      const column = dataColumn[0];
-      modelItems.getItemsSort(sort, column, (error, results, _fields) => {
-        if (!error) {
-          return standardResponse(res, 200, true, "Data read succesfully", results);
-        } else {
-          return standardResponse(res, 500, false, "Data read has failed!");
-        }
-      });
-    } else {
-      modelItems.getItems((error, results, _fields) => {
-        if (!error) {
-          return standardResponse(res, 200, true, "Data read succesfully", results);
-        } else {
-          return standardResponse(res, 500, false, "Data read has failed!");
-        }
-      });
-    }
-  }
+  });
 };
 
 exports.detailItems = (req, res) => {

@@ -9,7 +9,25 @@ exports.getItemsSort = (sort, column = item.name, cb) => {
 };
 
 exports.getItemByCond = (cond, cb) => {
-  db.query(`SELECT items.id, items.name, items.price, category.name AS category_name, items.created_at, items.updated_at FROM items LEFT JOIN category ON items.category_id = category.id WHERE items.name LIKE '%${cond}%'`, cb);
+  const orderBy = Object.keys(cond.sort)[0];
+  const sort = cond.sort[orderBy];
+  console.log(orderBy);
+  console.log(sort);
+
+  db.query(
+    `
+  SELECT items.id, items.name, items.price, category.name AS category_name, items.created_at, items.updated_at 
+  FROM items LEFT JOIN category ON items.category_id = category.id 
+  WHERE items.name LIKE '%${cond.search}%' 
+  ORDER BY items.${orderBy} ${sort}
+  LIMIT ? OFFSET ?`,
+    [cond.limit, cond.offset],
+    cb
+  );
+};
+
+exports.getItemsCount = (cond, cb) => {
+  db.query(`SELECT COUNT (items.id) as count FROM items WHERE items.name LIKE '%${cond.search}%'`, cb);
 };
 
 exports.getItemByCondNSort = (cond, sort, column = item.name, cb) => {
