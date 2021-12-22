@@ -7,7 +7,12 @@ exports.insertItems = (req, res) => {
   const dataInsert = { name, price, categoryId };
   modelItems.insertItems(dataInsert, (error, results, _fields) => {
     if (!error) {
-      return standardResponse(res, 200, true, "Data has been inserted succesfully!");
+      return standardResponse(
+        res,
+        200,
+        true,
+        "Data has been inserted succesfully!"
+      );
     } else {
       return standardResponse(res, 500, false, "Data insertion has failed!");
     }
@@ -41,9 +46,22 @@ exports.getItems = (req, res) => {
           pageInfo.currentPage = condition.page;
           pageInfo.lastPage = lastPage;
           pageInfo.limit = condition.limit;
-          pageInfo.nextPage = condition.page < lastPage ? `${APP_URL}/items/?page=${pageInfo.currentPage + 1}` : null;
-          pageInfo.prevPage = condition.page > 1 ? `${APP_URL}/items/?page=${pageInfo.currentPage - 1}` : null;
-          return standardResponse(res, 200, true, "Search data succesfully", results, pageInfo);
+          pageInfo.nextPage =
+            condition.page < lastPage
+              ? `${APP_URL}/items/?page=${pageInfo.currentPage + 1}`
+              : null;
+          pageInfo.prevPage =
+            condition.page > 1
+              ? `${APP_URL}/items/?page=${pageInfo.currentPage - 1}`
+              : null;
+          return standardResponse(
+            res,
+            200,
+            true,
+            "Search data succesfully",
+            results,
+            pageInfo
+          );
         } else {
           console.log(error);
           return standardResponse(res, 404, false, "Data not found!", results);
@@ -60,7 +78,13 @@ exports.detailItems = (req, res) => {
   const { id } = req.params;
   modelItems.getItemById(id, (error, results, _fields) => {
     if (!error) {
-      return standardResponse(res, 200, true, "Data read successfully by id!", results);
+      return standardResponse(
+        res,
+        200,
+        true,
+        "Data read successfully by id!",
+        results
+      );
     } else {
       console.log(error);
       return standardResponse(res, 500, false, "Data can't read by id!");
@@ -77,17 +101,30 @@ exports.updatePartial = (req, res) => {
         if (key.length == 1) {
           const firstColumn = key[0];
           const dataUpdate = { id, [firstColumn]: req.body[firstColumn] };
-          modelItems.updateItemPartial(dataUpdate, (error, results, _fields) => {
-            if (!error) {
-              return standardResponse(res, 200, true, "Data has been updated");
-            } else {
-              console.log(error);
-              return standardResponse(res, 500, false, "Data can't update!");
+          modelItems.updateItemPartial(
+            dataUpdate,
+            (error, results, _fields) => {
+              if (!error) {
+                return standardResponse(
+                  res,
+                  200,
+                  true,
+                  "Data has been updated"
+                );
+              } else {
+                console.log(error);
+                return standardResponse(res, 500, false, "Data can't update!");
+              }
             }
-          });
+          );
         } else {
           console.log("data's input must single data");
-          return standardResponse(res, 400, false, "data's input must single data");
+          return standardResponse(
+            res,
+            400,
+            false,
+            "data's input must single data"
+          );
         }
       } else {
         return standardResponse(res, 404, false, "Data not found!");
