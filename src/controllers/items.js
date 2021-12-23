@@ -36,6 +36,7 @@ exports.getItems = (req, res) => {
   pageInfo = {};
 
   modelItems.getItemByCond(condition, (error, results, _fields) => {
+    console.log(condition);
     if (!error) {
       modelItems.getItemsCount(condition, (error, resultCount, _fields) => {
         if (!error) {

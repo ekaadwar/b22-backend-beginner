@@ -29,8 +29,8 @@ exports.getItemByCond = (cond, cb) => {
 
   db.query(
     `
-  SELECT items.id, items.name, items.price, category.name AS category_name, items.created_at, items.updated_at 
-  FROM items LEFT JOIN category ON items.category_id = category.id 
+  SELECT items.id, items.name, items.price, categories.name AS category_name, items.created_at, items.updated_at 
+  FROM items LEFT JOIN categories ON items.category_id = categories.id 
   WHERE items.name LIKE '%${cond.search}%' 
   ORDER BY items.${orderBy} ${sort}
   LIMIT ? OFFSET ?`,
