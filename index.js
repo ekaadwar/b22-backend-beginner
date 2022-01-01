@@ -8,7 +8,7 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const whiteList = "http://localhost:3000";
+const whiteList = ["http://localhost:3000", "http://localhost:3001"];
 app.use(cors(whiteList));
 
 app.get("/", (req, res) => {
