@@ -20,23 +20,20 @@ exports.insertItems = (req, res) => {
 };
 
 exports.getItems = (req, res) => {
-  // const condition = req.query.search;
-  const sort = req.query.sort;
-
   const condition = req.query;
   condition.search = condition.search || "";
   condition.sort = condition.sort || {};
   condition.sort.name = condition.sort.name || "ASC";
-  condition.limit = parseInt(condition.limit) || 5;
+  condition.limit = parseInt(condition.limit) || 8;
   condition.offset = parseInt(condition.offset) || 0;
   condition.page = parseInt(condition.page) || 1;
+  condition.category = parseInt(condition.category);
 
   condition.offset = condition.page * condition.limit - condition.limit;
 
   pageInfo = {};
 
   modelItems.getItemByCond(condition, (error, results, _fields) => {
-    console.log(condition);
     if (!error) {
       modelItems.getItemsCount(condition, (error, resultCount, _fields) => {
         if (!error) {
@@ -74,6 +71,12 @@ exports.getItems = (req, res) => {
     }
   });
 };
+
+// exports.getItemsByCategory = (req, res) => {
+//   const { category } = req.params;
+
+//   // modelItems.getItemByCategory
+// };
 
 exports.detailItems = (req, res) => {
   const { id } = req.params;
@@ -155,7 +158,9 @@ exports.updateItem = (req, res) => {
 
 exports.deleteItem = (req, res) => {
   const { id: idString } = req.params;
+
   const id = parseInt(idString);
+
   modelItems.getItemById(id, (error, results, _fields) => {
     if (!error) {
       if (results.length > 0) {
@@ -167,7 +172,12 @@ exports.deleteItem = (req, res) => {
             return standardResponse(res, 500, false, "Data deletion failed");
           }
         });
+      } else {
+        return standardResponse(res, 404, false, "Data not found");
       }
+    } else {
+      console.log(error);
+      return standardResponse(res, 404, false, "an error occured");
     }
   });
 };

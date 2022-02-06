@@ -22,10 +22,12 @@ app.get("/", (req, res) => {
 const routeItems = require("./src/routes/items");
 const routeCate = require("./src/routes/categories");
 const routeVari = require("./src/routes/variants");
+const routeUsers = require("./src/routes/users");
 
 app.use("/items", routeItems);
 app.use("/categories", routeCate);
 app.use("/variants", routeVari);
+app.use("/users", routeUsers);
 
 app.listen(8080, () => {
   console.log("App running ini port 8080");

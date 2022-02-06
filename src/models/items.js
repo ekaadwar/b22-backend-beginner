@@ -24,16 +24,20 @@ exports.getItemsSort = (sort, column = item.name, cb) => {
 exports.getItemByCond = (cond, cb) => {
   const orderBy = Object.keys(cond.sort)[0];
   const sort = cond.sort[orderBy];
-  console.log(orderBy);
-  console.log(sort);
+
+  let and = "";
+
+  if (cond.category) {
+    and = `AND items.category_id=${cond.category}`;
+  }
 
   db.query(
     `
-  SELECT items.id, items.name, items.price, categories.name AS category_name, items.created_at, items.updated_at 
-  FROM items LEFT JOIN categories ON items.category_id = categories.id 
-  WHERE items.name LIKE '%${cond.search}%' 
-  ORDER BY items.${orderBy} ${sort}
-  LIMIT ? OFFSET ?`,
+      SELECT items.id, items.name, items.price, items.category_id, categories.name AS category_name, items.created_at, items.updated_at
+      FROM items LEFT JOIN categories ON items.category_id = categories.id
+      WHERE items.name LIKE '%${cond.search}%' ${and}
+      ORDER BY items.${orderBy} ${sort}
+      LIMIT ? OFFSET ?`,
     [cond.limit, cond.offset],
     cb
   );
@@ -55,7 +59,7 @@ exports.getItemByCondNSort = (cond, sort, column = item.name, cb) => {
 
 exports.getItemById = (id, cb) => {
   db.query(
-    `SELECT items.id, items.name, items.price, category.name AS category_name, items.created_at, items.updated_at FROM items LEFT JOIN category ON items.category_id = category.id WHERE items.id=${id}`,
+    `SELECT items.id, items.name, items.price, categories.name AS categories_name, items.created_at, items.updated_at FROM items LEFT JOIN categories ON items.category_id = categories.id WHERE items.id=${id}`,
     cb
   );
 };
