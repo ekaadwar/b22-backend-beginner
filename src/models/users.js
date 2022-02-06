@@ -42,6 +42,38 @@ exports.countData = (id, cb) => {
   );
 };
 
+exports.updateUser = (id, data, cb) => {
+  db.query(
+    `
+    UPDATE ${table}
+    SET
+      display_name=?,
+      email=?,
+      password=?,
+      mobile_number=?,
+      address=?,
+      first_name=?,
+      last_name=?,
+      gender=?,
+      birth=?
+    WHERE id=?
+  `,
+    [
+      data.displayName,
+      data.email,
+      data.password,
+      data.mobileNumber,
+      data.address,
+      data.firstName,
+      data.lastName,
+      data.gender,
+      data.birth,
+      id,
+    ],
+    cb
+  );
+};
+
 exports.deleteUser = (id, cb) => {
   db.query(`DELETE FROM ${table} WHERE id=?`, [id], cb);
 };

@@ -30,7 +30,6 @@ exports.getUserById = (req, res) => {
         }
       });
     } else {
-      // standardResponse(res, 404, false, `User nor found. Error : ${error}`);
       standardResponse(res, 500, false, `an error occured : ${error}`);
     }
   });
@@ -40,10 +39,61 @@ exports.addUser = (req, res) => {
   const data = req.body;
   modelUsers.addUser(data, (error, _results, _fields) => {
     if (!error) {
-      standardResponse(res, 200, true, "User has been added");
+      return standardResponse(res, 200, true, "User has been added");
     } else {
       console.log(error);
-      standardResponse(res, 500, false, error);
+      return standardResponse(res, 500, false, error);
+    }
+  });
+};
+
+exports.updateUser = (req, res) => {
+  const { id: idString } = req.params;
+  const id = parseInt(idString);
+  const data = req.body;
+
+  modelUsers.getUserById(id, (error, results, _fields) => {
+    if (!error) {
+      modelUsers.countData(id, (errorCount, resultCount, _fields) => {
+        if (!errorCount) {
+          const totalData = Object.values(resultCount[0])[0];
+          if (totalData > 0) {
+            modelUsers.updateUser(
+              id,
+              data,
+              (errorUpdate, _resultUpdate, _fields) => {
+                if (!errorUpdate) {
+                  return standardResponse(
+                    res,
+                    200,
+                    true,
+                    "Data has been inserted succesfully!"
+                  );
+                } else {
+                  return standardResponse(
+                    res,
+                    500,
+                    false,
+                    `data failed to update. Error : ${error}`
+                  );
+                }
+              }
+            );
+          } else {
+            return standardResponse(res, 404, false, "Data not found");
+          }
+        } else {
+          console.log(error);
+          return standardResponse(
+            res,
+            500,
+            false,
+            `an error occured : ${error}`
+          );
+        }
+      });
+    } else {
+      return standardResponse(res, 500, false, `an error occured : ${error}`);
     }
   });
 };
@@ -58,9 +108,9 @@ exports.deleteUser = (req, res) => {
           if (totalData > 0) {
             modelUsers.deleteUser(id, (error, _resultDelete, _fieldDelete) => {
               if (!error) {
-                standardResponse(res, 200, true, `Data has been delete`);
+                return standardResponse(res, 200, true, `Data has been delete`);
               } else {
-                standardResponse(
+                return standardResponse(
                   res,
                   500,
                   false,
@@ -69,16 +119,20 @@ exports.deleteUser = (req, res) => {
               }
             });
           } else {
-            standardResponse(res, 404, false, "Data not found");
+            return standardResponse(res, 404, false, "Data not found");
           }
         } else {
           console.log(error);
-          standardResponse(res, 500, false, `an error occured : ${error}`);
+          return standardResponse(
+            res,
+            500,
+            false,
+            `an error occured : ${error}`
+          );
         }
       });
     } else {
-      // standardResponse(res, 404, false, `User nor found. Error : ${error}`);
-      standardResponse(res, 500, false, `an error occured : ${error}`);
+      return standardResponse(res, 500, false, `an error occured : ${error}`);
     }
   });
 };
