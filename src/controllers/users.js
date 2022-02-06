@@ -16,9 +16,22 @@ exports.getUserById = (req, res) => {
   const { id } = req.params;
   modelUsers.getUserById(id, (error, results, _fields) => {
     if (!error) {
-      standardResponse(res, 200, true, "User Data", results);
+      modelUsers.countData(id, (errorCount, resultCount, _fields) => {
+        if (!errorCount) {
+          const totalData = Object.values(resultCount[0])[0];
+          if (totalData > 0) {
+            standardResponse(res, 200, true, `User's Data`, results[0]);
+          } else {
+            standardResponse(res, 404, false, "Data not found");
+          }
+        } else {
+          console.log(error);
+          standardResponse(res, 500, false, `an error occured : ${error}`);
+        }
+      });
     } else {
-      standardResponse(res, 404, false, `User nor found. Error : ${error}`);
+      // standardResponse(res, 404, false, `User nor found. Error : ${error}`);
+      standardResponse(res, 500, false, `an error occured : ${error}`);
     }
   });
 };
@@ -37,6 +50,35 @@ exports.addUser = (req, res) => {
 
 exports.deleteUser = (req, res) => {
   const { id } = req.params;
-
-  console.log(id);
+  modelUsers.getUserById(id, (error, results, _fields) => {
+    if (!error) {
+      modelUsers.countData(id, (errorCount, resultCount, _fields) => {
+        if (!errorCount) {
+          const totalData = Object.values(resultCount[0])[0];
+          if (totalData > 0) {
+            modelUsers.deleteUser(id, (error, _resultDelete, _fieldDelete) => {
+              if (!error) {
+                standardResponse(res, 200, true, `Data has been delete`);
+              } else {
+                standardResponse(
+                  res,
+                  500,
+                  false,
+                  `data failed to delete : ${error}`
+                );
+              }
+            });
+          } else {
+            standardResponse(res, 404, false, "Data not found");
+          }
+        } else {
+          console.log(error);
+          standardResponse(res, 500, false, `an error occured : ${error}`);
+        }
+      });
+    } else {
+      // standardResponse(res, 404, false, `User nor found. Error : ${error}`);
+      standardResponse(res, 500, false, `an error occured : ${error}`);
+    }
+  });
 };

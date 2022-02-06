@@ -32,3 +32,16 @@ exports.addUser = (data, cb) => {
     cb
   );
 };
+
+exports.countData = (id, cb) => {
+  db.query(
+    `
+  SELECT COUNT(id) FROM ${table} WHERE id=${id}
+`,
+    cb
+  );
+};
+
+exports.deleteUser = (id, cb) => {
+  db.query(`DELETE FROM ${table} WHERE id=?`, [id], cb);
+};
