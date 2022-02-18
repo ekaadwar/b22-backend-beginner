@@ -1,4 +1,4 @@
-<h1 align="center">Backend - Coffeshop RESTfull API</h1>
+<h1 align="center">Backend - Ekacoffee Web Apps</h1>
 
 Web application for ordering food and drinks,
 this application is made using Express JS & Node JS
@@ -21,46 +21,21 @@ this application is made using Express JS & Node JS
 
 1. Open app's directory in CMD or Terminal
 2. Type `npm install`
-3. Make new file a called **.env**, set up first [here](#set-up-env-file)
-4. Turn on Web Server and MySQL can using Third-party tool like xampp, etc.
-5. Create a database with the name #cofeeshop, and Import file sql to **phpmyadmin**
-6. Open Postman desktop application or Chrome web app extension that has installed before
-7. Choose HTTP Method and enter request url.(ex. localhost:3000/)
-8. You can see all the end point [here](https://documenter.getpostman.com/view/15940810/TzscomKH)
+3. Turn on Web Server and MySQL can using Third-party tool like xampp, etc.
+4. Create a database with the name #cofeeshop, and Import file sql to **coffee**
+5. Open Postman desktop application or Chrome web app extension that has installed before
+6. Choose HTTP Method and enter request url.(ex. localhost:3000/)
+7. You can see all the end point [here](https://documenter.getpostman.com/view/4900367/UVkiTys6)
 
 # Feature
 
 <ul>
-<li>Login & Register</li>
-<li>Get User</li>
-<li>delete User</li>
-<li>Update Profile</li>
-<li>Get Items</li>
-<li>Transaction</li>
-<li>Add to Cart</li>
-<li>History Transaction</li>
-<li>chat</li>
+<li>Get Product</li>
+<li>Seach Product</li>
+<li>Delete Product</li>
+<li>Get Profile</li>
 </ul>
-
-## Set up .env file
-
-Open .env file on your favorite code editor, and copy paste this code below :
-
-```
-NODE_ENV = development
-
-APP_URL=http://localhost:8080 //app url access
-APP_KEY=MyBackend //key access
-APP_UPLOAD_ROUTE=/upload // route upload file
-APP_UPLOAD_PATH=assets/images //route upload path
-APP_TRANSACTION_PREFIX=CS //transaction code prefix
-
-DB_HOST = localhost // db host
-DB_USER = root // db user
-DB_PASSWORD =  //db password
-DB_DATABASE = coffeeshop //db name
-```
 
 ## License
 
-© [M Fiqry Arahmansyah](https://www.instagram.com/xfiqryx)
+© [Eka Fajhari Adwar](https://www.instagram.com/ekaadwar/)
