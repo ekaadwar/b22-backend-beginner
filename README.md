@@ -22,7 +22,7 @@ this application is made using Express JS & Node JS
 1. Open app's directory in CMD or Terminal
 2. Type `npm install`
 3. Turn on Web Server and MySQL can using Third-party tool like xampp, etc.
-4. Create a database with the name #cofeeshop, and Import file sql to **coffee**
+4. Create a database with the name #coffee, and Import file sql to **coffee**
 5. Open Postman desktop application or Chrome web app extension that has installed before
 6. Choose HTTP Method and enter request url.(ex. localhost:3000/)
 7. You can see all the end point [here](https://documenter.getpostman.com/view/4900367/UVkiTys6)
