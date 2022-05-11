@@ -1,5 +1,7 @@
 node_modules/
 
+.env
+
 testing.js
 dailyStandUp.txt
 databaseStructure.xlsx
